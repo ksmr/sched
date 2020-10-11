@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.IllegalArgumentException;
 import java.lang.UnsupportedOperationException;
+import java.util.BitSet;
 
 /**
  * Utils to set and get the CPU affinity mask of the current <code>Thread</code>.
@@ -32,6 +33,8 @@ public class Sched {
     /**
      * Sets the CPU affinity mask of the current thread to <code>mask</code>.
      *
+     * Only works on machines with at most 64 processors. For larger ranges of CPUs use <code>setAffinityBitSet</code>.
+     *
      * @param mask The CPU affinity mask
      * @throws UnsupportedOperationException If the operating system is not supported by this library.
      * @throws IllegalArgumentException If the mask contains no processors that are currently physically on the system and permitted to the current thread.
@@ -44,20 +47,51 @@ public class Sched {
     }
 
     /**
+     * Sets the CPU affinity mask of the current thread to <code>mask</code>.
+     *
+     * @param mask The CPU affinity mask
+     * @throws UnsupportedOperationException If the operating system is not supported by this library.
+     * @throws IllegalArgumentException If the mask contains no processors that are currently physically on the system and permitted to the current thread.
+     */
+    public static void setAffinityBitSet(final BitSet mask) {
+        if (!supported)
+            throw new UnsupportedOperationException();
+
+        linux_sched_setaffinity_dynamic(mask.toLongArray());
+    }
+
+    /**
      * Gets the CPU affinity mask of the current thread as a <code>long</code>.
+     *
+     * Only works on machines with at most 64 processors. For larger ranges of CPUs use <code>getAffinityBitSet</code>.
      *
      * @throws UnsupportedOperationException If the operating system is not supported by this library.
      */
-    public static long getAffinity() throws IllegalArgumentException, UnsupportedOperationException {
+    public static long getAffinity() {
         if (!supported)
             throw new UnsupportedOperationException();
 
         return linux_sched_getaffinity();
     }
+    /**
+     * Gets the CPU affinity mask of the current thread as a <code>long</code>.
+     *
+     * @throws UnsupportedOperationException If the operating system is not supported by this library.
+     */
+    public static BitSet getAffinityBitSet() {
+        if (!supported)
+            throw new UnsupportedOperationException();
+
+        return BitSet.valueOf(linux_sched_getaffinity_dynamic());
+    }
 
     private static native void linux_sched_setaffinity(long mask);
 
+    private static native void linux_sched_setaffinity_dynamic(long[] mask);
+
     private static native long linux_sched_getaffinity();
+
+    private static native long[] linux_sched_getaffinity_dynamic();
 
     private static boolean checkLinux() {
         return System.getProperty("os.name").contains("Linux");

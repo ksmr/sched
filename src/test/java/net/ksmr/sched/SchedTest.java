@@ -1,8 +1,9 @@
 package net.ksmr.sched;
 
-import static org.junit.Assert.*;
 
+import java.util.BitSet;
 import org.junit.Test;
+import static org.junit.Assert.*;
 
 public class SchedTest {
 
@@ -29,6 +30,35 @@ public class SchedTest {
 
         assertEquals(1l, pinnedMask);
         assertEquals(fullmask, mask);
+    }
+
+    @Test
+    public void pinBitSet() {
+        long fullmask = Sched.getAffinity();
+
+        BitSet mask = new BitSet();
+        mask.set(0);
+        mask.set(600);
+        Sched.setAffinityBitSet(mask);
+
+        long pinnedMask = Sched.getAffinity();
+
+        Sched.setAffinity(Long.MAX_VALUE);
+
+        long mask2 = Sched.getAffinity();
+
+        assertEquals(1l, pinnedMask);
+        assertEquals(fullmask, mask2);
+    }
+
+    @Test
+    public void getAffinityBitSet() {
+        Sched.setAffinity(1);
+
+        BitSet set = Sched.getAffinityBitSet();
+
+        assertEquals(1, set.cardinality());
+        assertEquals(true, set.get(0));
     }
 
 }
