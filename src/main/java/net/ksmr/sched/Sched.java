@@ -17,11 +17,11 @@ public class Sched {
     private static boolean supported = false;
 
     static {
-        supported = checkLinux();
+        supported = checkSupport();
         if (supported) {
             try {
-                loadNative("net_ksmr_sched_Sched.so");
-            } catch (IOException e) {
+                loadNative("libsched-" + System.getProperty("os.arch") + ".so");
+            } catch (Exception e) {
                 supported = false;
             }
         }
@@ -93,12 +93,15 @@ public class Sched {
 
     private static native long[] linux_sched_getaffinity_dynamic();
 
-    private static boolean checkLinux() {
+    private static boolean checkSupport() {
         return System.getProperty("os.name").contains("Linux");
     }
 
     private static void loadNative(final String name) throws IOException {
         InputStream in = Sched.class.getClassLoader().getResourceAsStream(name);
+
+        if (in == null)
+            throw new UnsupportedOperationException();
 
         int pos = name.lastIndexOf(".");
         File tmpFile = File.createTempFile(name.substring(0, pos), name.substring(pos));

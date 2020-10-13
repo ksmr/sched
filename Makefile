@@ -1,13 +1,14 @@
-CC=gcc
+CC?=gcc
+ARCH?=amd64
 CFLAGS=-c -Wall -Werror -Wpedantic -O2 -fPIC -I$(JAVA_HOME)/include -I$(JAVA_HOME)/include/linux
 LDFLAGS=-fPIC -shared
 
 SOURCES_DIR=src/main/c/net/ksmr/sched
 OBJECTS_DIR=target/c
-EXECUTABLE=target/classes/net_ksmr_sched_Sched.so
+EXECUTABLE=target/classes/libsched-$(ARCH).so
 
 SOURCES=$(shell find '$(SOURCES_DIR)' -type f -name '*.c')
-OBJECTS=$(SOURCES:$(SOURCES_DIR)/%.c=$(OBJECTS_DIR)/%.o)
+OBJECTS=$(SOURCES:$(SOURCES_DIR)/%.c=$(OBJECTS_DIR)/%-$(ARCH).o)
 
 all: $(EXECUTABLE)
 
