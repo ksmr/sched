@@ -5,7 +5,7 @@
 
   <groupId>net.ksmr</groupId>
   <artifactId>sched</artifactId>
-  <version>0.1.0</version>
+  <version>0.1.1-SNAPSHOT</version>
 
   <name>sched</name>
   <description>A small Java library to set the CPU affinity mask of the current thread.</description>
@@ -29,7 +29,7 @@
     <connection>scm:git:git://github.com/ksmr/sched.git</connection>
     <developerConnection>scm:git:ssh://git@github.com/ksmr/sched.git</developerConnection>
     <url>https://github.com/ksmr/sched/tree/master</url>
-    <tag>sched-0.1.0</tag>
+    <tag>HEAD</tag>
   </scm>
 
   <distributionManagement>
