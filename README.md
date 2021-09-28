@@ -9,10 +9,10 @@ Available on the Maven Central Repository. Add the following dependency to your 
     <dependency>
       <groupId>net.ksmr</groupId>
       <artifactId>sched</artifactId>
-      <version>0.1.0</version>
+      <version>0.1.1</version>
     </dependency>
 
-**Note:** The prebuilt version will currently only work on x86_64 systems (`amd64` architecture in Java). On other architectures the methods will throw `UnsupportedOperationException`. However, compiling the library on another architecture should make a JAR that supports the given architecture.
+**Note:** The prebuilt version will currently only work on x86_64 and ARM64 systems (`amd64` and `aarch64` architectures in Java). On other architectures the methods will throw `UnsupportedOperationException`. However, compiling the library on another architecture should make a JAR that supports the given architecture.
 
 ## Build requirements
 
